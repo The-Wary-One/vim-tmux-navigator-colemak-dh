@@ -14,10 +14,10 @@ Usage
 This plugin provides the following mappings which allow you to move between
 Vim panes and tmux splits seamlessly.
 
-- `<ctrl-h>` => Left
-- `<ctrl-j>` => Down
-- `<ctrl-k>` => Up
-- `<ctrl-l>` => Right
+- `<ctrl-m>` => Left
+- `<ctrl-n>` => Down
+- `<ctrl-e>` => Up
+- `<ctrl-i>` => Right
 - `<ctrl-\>` => Previous split
 
 **Note** - you don't need to use your tmux `prefix` key sequence before using
@@ -67,20 +67,20 @@ Add the following to your `~/.tmux.conf` file:
 # See: https://github.com/christoomey/vim-tmux-navigator
 is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
     | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?|fzf)(diff)?$'"
-bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
-bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
-bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
-bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
+bind-key -n 'C-m' if-shell "$is_vim" 'send-keys C-m'  'select-pane -L'
+bind-key -n 'C-n' if-shell "$is_vim" 'send-keys C-n'  'select-pane -D'
+bind-key -n 'C-e' if-shell "$is_vim" 'send-keys C-e'  'select-pane -U'
+bind-key -n 'C-i' if-shell "$is_vim" 'send-keys C-i'  'select-pane -R'
 tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
 if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
     "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
 if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
     "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
 
-bind-key -T copy-mode-vi 'C-h' select-pane -L
-bind-key -T copy-mode-vi 'C-j' select-pane -D
-bind-key -T copy-mode-vi 'C-k' select-pane -U
-bind-key -T copy-mode-vi 'C-l' select-pane -R
+bind-key -T copy-mode-vi 'C-m' select-pane -L
+bind-key -T copy-mode-vi 'C-n' select-pane -D
+bind-key -T copy-mode-vi 'C-e' select-pane -U
+bind-key -T copy-mode-vi 'C-i' select-pane -R
 bind-key -T copy-mode-vi 'C-\' select-pane -l
 ```
 
@@ -123,8 +123,8 @@ noremap <silent> {Previous-Mapping} :<C-U>TmuxNavigatePrevious<cr>
 ```
 
 *Note* Each instance of `{Left-Mapping}` or `{Down-Mapping}` must be replaced
-in the above code with the desired mapping. Ie, the mapping for `<ctrl-h>` =>
-Left would be created with `noremap <silent> <c-h> :<C-U>TmuxNavigateLeft<cr>`.
+in the above code with the desired mapping. Ie, the mapping for `<ctrl-m>` =>
+Left would be created with `noremap <silent> <c-m> :<C-U>TmuxNavigateLeft<cr>`.
 
 ##### Autosave on leave
 
@@ -241,15 +241,15 @@ to conditionally wrap based on position on screen:
 ```tmux
 is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
     | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?|fzf)(diff)?$'"
-bind-key -n 'C-h' if-shell "$is_vim" { send-keys C-h } { if-shell -F '#{pane_at_left}'   {} { select-pane -L } }
-bind-key -n 'C-j' if-shell "$is_vim" { send-keys C-j } { if-shell -F '#{pane_at_bottom}' {} { select-pane -D } }
-bind-key -n 'C-k' if-shell "$is_vim" { send-keys C-k } { if-shell -F '#{pane_at_top}'    {} { select-pane -U } }
-bind-key -n 'C-l' if-shell "$is_vim" { send-keys C-l } { if-shell -F '#{pane_at_right}'  {} { select-pane -R } }
+bind-key -n 'C-m' if-shell "$is_vim" { send-keys C-m } { if-shell -F '#{pane_at_left}'   {} { select-pane -L } }
+bind-key -n 'C-n' if-shell "$is_vim" { send-keys C-n } { if-shell -F '#{pane_at_bottom}' {} { select-pane -D } }
+bind-key -n 'C-e' if-shell "$is_vim" { send-keys C-e } { if-shell -F '#{pane_at_top}'    {} { select-pane -U } }
+bind-key -n 'C-i' if-shell "$is_vim" { send-keys C-i } { if-shell -F '#{pane_at_right}'  {} { select-pane -R } }
 
-bind-key -T copy-mode-vi 'C-h' if-shell -F '#{pane_at_left}'   {} { select-pane -L }
-bind-key -T copy-mode-vi 'C-j' if-shell -F '#{pane_at_bottom}' {} { select-pane -D }
-bind-key -T copy-mode-vi 'C-k' if-shell -F '#{pane_at_top}'    {} { select-pane -U }
-bind-key -T copy-mode-vi 'C-l' if-shell -F '#{pane_at_right}'  {} { select-pane -R }
+bind-key -T copy-mode-vi 'C-m' if-shell -F '#{pane_at_left}'   {} { select-pane -L }
+bind-key -T copy-mode-vi 'C-n' if-shell -F '#{pane_at_bottom}' {} { select-pane -D }
+bind-key -T copy-mode-vi 'C-e' if-shell -F '#{pane_at_top}'    {} { select-pane -U }
+bind-key -T copy-mode-vi 'C-i' if-shell -F '#{pane_at_right}'  {} { select-pane -R }
 ```
 
 #### Nesting
@@ -275,10 +275,10 @@ directly. These following fallback mappings can be targeted to the right Tmux
 session by escaping the prefix (Tmux' `send-prefix` command).
 
 ``` tmux
-bind -r C-h run "tmux select-pane -L"
-bind -r C-j run "tmux select-pane -D"
-bind -r C-k run "tmux select-pane -U"
-bind -r C-l run "tmux select-pane -R"
+bind -r C-m run "tmux select-pane -L"
+bind -r C-n run "tmux select-pane -D"
+bind -r C-e run "tmux select-pane -U"
+bind -r C-i run "tmux select-pane -R"
 bind -r C-\ run "tmux select-pane -l"
 ```
 
@@ -286,15 +286,15 @@ Another workaround is to configure tmux on the outer machine to send keys to
 the inner tmux session:
 
 ```
-bind-key -n 'M-h' 'send-keys c-h'
-bind-key -n 'M-j' 'send-keys c-j'
-bind-key -n 'M-k' 'send-keys c-k'
-bind-key -n 'M-l' 'send-keys c-l'
+bind-key -n 'M-m' 'send-keys c-m'
+bind-key -n 'M-n' 'send-keys c-n'
+bind-key -n 'M-e' 'send-keys c-e'
+bind-key -n 'M-i' 'send-keys c-i'
 ```
 
 Here we bind "meta" key (aka "alt" or "option" key) combinations for each of
 the four directions and send those along to the innermost session via
-`send-keys`. You use the normal `C-h,j,k,l` while in the outermost session and
+`send-keys`. You use the normal `C-m,n,e,i` while in the outermost session and
 the alternative bindings to navigate the innermost session. Note that if you
 use the example above on a Mac, you may need to configure your terminal app to
 get the option key to work like a normal meta key. Consult your terminal app's

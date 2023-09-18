@@ -1,4 +1,4 @@
-" Maps <C-h/j/k/l> to switch vim splits in the given direction. If there are
+" Maps <c-m/n/e/i> to switch vim splits in the given direction. If there are
 " no more windows in that direction, forwards the operation to tmux.
 " Additionally, <C-\> toggles between last active vim splits/tmux panes.
 
@@ -16,26 +16,26 @@ function! s:VimNavigate(direction)
 endfunction
 
 if !get(g:, 'tmux_navigator_no_mappings', 0)
-  noremap <silent> <c-h> :<C-U>TmuxNavigateLeft<cr>
-  noremap <silent> <c-j> :<C-U>TmuxNavigateDown<cr>
-  noremap <silent> <c-k> :<C-U>TmuxNavigateUp<cr>
-  noremap <silent> <c-l> :<C-U>TmuxNavigateRight<cr>
+  noremap <silent> <c-m> :<C-U>TmuxNavigateLeft<cr>
+  noremap <silent> <c-n> :<C-U>TmuxNavigateDown<cr>
+  noremap <silent> <c-e> :<C-U>TmuxNavigateUp<cr>
+  noremap <silent> <c-i> :<C-U>TmuxNavigateRight<cr>
   noremap <silent> <c-\> :<C-U>TmuxNavigatePrevious<cr>
 endif
 
 if empty($TMUX)
-  command! TmuxNavigateLeft call s:VimNavigate('h')
-  command! TmuxNavigateDown call s:VimNavigate('j')
-  command! TmuxNavigateUp call s:VimNavigate('k')
-  command! TmuxNavigateRight call s:VimNavigate('l')
+  command! TmuxNavigateLeft call s:VimNavigate('m')
+  command! TmuxNavigateDown call s:VimNavigate('n')
+  command! TmuxNavigateUp call s:VimNavigate('e')
+  command! TmuxNavigateRight call s:VimNavigate('i')
   command! TmuxNavigatePrevious call s:VimNavigate('p')
   finish
 endif
 
-command! TmuxNavigateLeft call s:TmuxAwareNavigate('h')
-command! TmuxNavigateDown call s:TmuxAwareNavigate('j')
-command! TmuxNavigateUp call s:TmuxAwareNavigate('k')
-command! TmuxNavigateRight call s:TmuxAwareNavigate('l')
+command! TmuxNavigateLeft call s:TmuxAwareNavigate('m')
+command! TmuxNavigateDown call s:TmuxAwareNavigate('n')
+command! TmuxNavigateUp call s:TmuxAwareNavigate('e')
+command! TmuxNavigateRight call s:TmuxAwareNavigate('i')
 command! TmuxNavigatePrevious call s:TmuxAwareNavigate('p')
 
 if !exists("g:tmux_navigator_save_on_switch")
@@ -54,7 +54,7 @@ if !exists("g:tmux_navigator_no_wrap")
   let g:tmux_navigator_no_wrap = 0
 endif
 
-let s:pane_position_from_direction = {'h': 'left', 'j': 'bottom', 'k': 'top', 'l': 'right'}
+let s:pane_position_from_direction = {'m': 'left', 'n': 'bottom', 'e': 'top', 'i': 'right'}
 
 function! s:TmuxOrTmateExecutable()
   return (match($TMUX, 'tmate') != -1 ? 'tmate' : 'tmux')
@@ -122,7 +122,7 @@ function! s:TmuxAwareNavigate(direction)
       catch /^Vim\%((\a\+)\)\=:E141/ " catches the no file name error
       endtry
     endif
-    let args = 'select-pane -t ' . shellescape($TMUX_PANE) . ' -' . tr(a:direction, 'phjkl', 'lLDUR')
+    let args = 'select-pane -t ' . shellescape($TMUX_PANE) . ' -' . tr(a:direction, 'pmnei', 'lLDUR')
     if g:tmux_navigator_preserve_zoom == 1
       let l:args .= ' -Z'
     endif
