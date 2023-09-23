@@ -17,7 +17,7 @@ is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
 #  "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
 
 tmux bind-key -T root         Escape if-shell "$is_vim" "send-keys Escape" copy-mode
-tmux bind-key -T prefix       s      split-window -vc "#{pane_current_path}" # h split current pane at cwd
+tmux bind-key -T prefix       h      split-window -vc "#{pane_current_path}" # h split current pane at cwd
 tmux bind-key -T prefix       v      split-window -hc "#{pane_current_path}" # v split current pane at cwd
 
 tmux bind-key -T copy-mode-vi u      send-keys -X cancel
